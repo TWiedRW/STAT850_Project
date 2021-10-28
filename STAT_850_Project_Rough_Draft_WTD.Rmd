@@ -1,0 +1,46 @@
+---
+title: "Stat 850 Project Rough Draft"
+author: "Drew Hultquist, Tyler Wiederich, Wyatt McLeod"
+output: github_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(digits = 3)
+```
+
+## Data Set
+
+<https://opendata.lincoln.ne.gov/datasets/LincolnNE>::lfr-apparatus-2019/about
+
+<https://opendata.lincoln.ne.gov/datasets/lfr-incidents-2019/explore>
+
+
+<https://opendata.lincoln.ne.gov/maps/941bdcfcaa4b460581461537687d8a92/about>
+fire zone map square miles of fire zone max distanced traveled
+
+
+```{r}
+library(tidyverse)
+tmp <- read_csv("LFR_incidents_2019_CLEAN.csv")
+incidents <- read.csv("LFR_incidents_2019_CLEAN.csv")
+apparatus <- read.csv("LFR_apparatus_2019_CLEAN.csv")
+library(skimr)
+skim(tmp)
+```
+
+> 
+
+
+
+
+```{r}
+library(sf)
+library(ggplot2)
+
+
+
+```
