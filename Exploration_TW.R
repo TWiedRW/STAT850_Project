@@ -19,6 +19,7 @@
 
 library(tidyverse)
 library(lubridate)
+options(scipen = 999)
 
 apparatus = read.csv('LFR_apparatus_2019_CLEAN.csv')
 incidents = read.csv('LFR_incidents_2019_CLEAN.csv')
@@ -31,29 +32,36 @@ apparatus2 = apparatus %>%
          ctm_clear = mdy_hms(ctm_clear),
          total_commit_time = ctm_clear - ctm_received)
 
-ggplot(apparatus2, mapping = aes(x = unit_descr, y = total_commit_time)) +
-  geom_point() +
-  scale_y_time(date_)
+joined = full_join(apparatus2, incidents, by = c('incno' = 'incno'))
 
 
-joined = full_join(apparatus, incidents, by = c('incno' = 'incno'))
-
-test = joined %>% 
-  group_by(incno, priority) %>% 
-  summarise(number_vehicles = n(),
-            priority = mean(priority),
-            prop_loss = mean(prop_loss, na.rm = TRUE),
-            prop_value = mean(prop_value, na.rm = T),
-            percent_prop_loss = mean(prop_loss, na.rm = T) / mean(prop_value, na.rm = T))
-
-  
-test %>% 
-  ggplot(mapping = aes(x = round(percent_prop_loss, 1), y = number_vehicles,
-                       group = percent_prop_loss)) +
-  geom_bar(stat = 'summary', fun = 'mean') 
-
-apparatus %>% 
-  mutate()
+#Looking at amount of time it takes for first responder to arrive
+first_responder = apparatus2 %>% 
   group_by(incno) %>% 
-  summarise(te)
+  filter(ctm_arrive == min(ctm_arrive, na.rm = TRUE),
+         is.na(ctm_arrive) == F,
+         ctm_arrive > ctm_received) %>% 
+  ungroup() %>% 
+  mutate(time_to_arrive_min = as.numeric(ctm_arrive - ctm_received)/60)
+
+summary(first_responder$time_to_arrive_min)
+
+
+fr_log = first_responder %>% 
+  ggplot(mapping = aes(x = log(time_to_arrive_min))) +
+  geom_density() +
+  facet_wrap(~station)
+fr_log  #We see that this approximately log-normal
+
+attach(first_responder)
+mod = aov(log(time_to_arrive_min) ~ as.character(station))
+
+anova(mod)
+TukeyHSD(mod, conf.level = 0.99) %>% broom::tidy() %>% 
+  filter(adj.p.value <= 0.05) %>% 
+  mutate(estimate = exp(estimate),
+         conf.low = exp(conf.low),
+         conf.high = exp(conf.high)) %>% 
+  View()
+
 
