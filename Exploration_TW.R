@@ -65,3 +65,32 @@ TukeyHSD(mod, conf.level = 0.99) %>% broom::tidy() %>%
   View()
 
 
+#Join weather and daily incidents
+weather = read.csv('weather.csv')
+weather = weather %>% 
+  #filter(STATION == 'US10lanc043') %>% 
+  mutate(DATE = as.Date(DATE))
+
+
+dat_weath = apparatus2 %>% 
+  select(incno, ctm_dispatch) %>% 
+  mutate(ctm_dispatch = lubridate::as_date(ctm_dispatch)) %>% 
+  distinct() %>% 
+  group_by(ctm_dispatch) %>% 
+  summarize(Count = n()) %>% 
+  full_join(weather, by = c('ctm_dispatch' = 'DATE'))
+
+dat_weath %>% 
+  select(ctm_dispatch, PRCP, Count) %>% 
+  reshape2::melt(id.vars = 'ctm_dispatch') %>% 
+  ggplot(mapping = aes(x = ctm_dispatch)) +
+  geom_point(mapping = aes(y = value)) +
+  facet_wrap(~variable,
+             nrow = 2,
+             scales = 'free_y')
+
+
+
+
+
+
