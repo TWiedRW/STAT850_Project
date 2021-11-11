@@ -57,13 +57,16 @@ attach(first_responder)
 mod = aov(log(time_to_arrive_min) ~ as.character(station))
 
 anova(mod)
-TukeyHSD(mod, conf.level = 0.99) %>% broom::tidy() %>% 
+TukeyHSD(mod, conf.level = 0.95) %>% broom::tidy() %>% 
   filter(adj.p.value <= 0.05) %>% 
   mutate(estimate = exp(estimate),
          conf.low = exp(conf.low),
          conf.high = exp(conf.high)) %>% 
   View()
 
+
+
+TukeyHSD(mod) %>% plot()
 
 #Join weather and daily incidents
 weather = read.csv('weather.csv')
@@ -88,6 +91,38 @@ dat_weath %>%
   facet_wrap(~variable,
              nrow = 2,
              scales = 'free_y')
+
+
+
+
+
+
+
+
+joined %>% 
+  mutate(date = as.Date(ctm_dispatch)) %>% 
+  select(incno, date) %>% 
+  distinct() %>% 
+  group_by(date) %>% 
+  summarise(count = n()) %>% 
+  mutate(month = lubridate::month(date, label = T),
+         dayofweek = lubridate::wday(date, label = T)) %>% 
+  filter(is.na(date) == F) %>% 
+  ggplot(mapping = aes(x = dayofweek, y = month,
+                       fill = count)) +
+  geom_raster() +
+  theme_minimal()
+
+
+
+traffic <- read_csv("Traffic_Crashes_2019.csv")
+
+
+
+
+
+
+
 
 
 
