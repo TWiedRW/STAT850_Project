@@ -64,7 +64,7 @@ TukeyHSD(mod, conf.level = 0.95) %>% broom::tidy() %>%
          conf.high = exp(conf.high)) %>% 
   View()
 
-
+read
 
 TukeyHSD(mod) %>% plot()
 
@@ -114,18 +114,56 @@ joined %>%
   theme_minimal()
 
 
-
-traffic <- read_csv("Traffic_Crashes_2019.csv")
-
-
-
-
-
+# Seeing if traffic accidents and incidents are related or not
+traffic <- read_csv("Traffic_Crashes_2019.csv") %>% 
+  mutate(DOA = as.POSIXct(DOA/1000, origin = '1970-01-01'),
+         Date = as.Date(DOA)) %>% 
+  filter(year(Date) == 2019)
 
 
+traffic %>% 
+  group_by(Date) %>% 
+  summarise(Count = n()) %>% 
+  ggplot(aes(x = Date, y = Count)) +
+  geom_line()
+
+
+traffic_summ = traffic %>% 
+  group_by(Date) %>% 
+  summarise(Count_acc = n())
+
+inc_summ = joined %>% 
+  mutate(Date = as.Date(ctm_dispatch)) %>% 
+  select(Date, incno) %>% 
+  unique() %>% 
+  group_by(Date) %>% 
+  summarise(Count = n()) %>% 
+  filter(is.na(Date) == F)
+
+
+inc_traff = traffic_summ %>% 
+  full_join(inc_summ, by = 'Date') %>% 
+  filter(is.na(Date) == F) %>% 
+  mutate(wday = wday(Date, label = T))
+
+
+cor(inc_traff$Count_acc, inc_traff$Count)
 
 
 
+attach(inc_traff)
+mod_wday = aov(Count ~ wday)
+summary(mod_wday)
+detach(inc_traff)
 
+inc_traff %>% 
+  ggplot(aes(x = wday, y = Count)) +
+  geom_boxplot(fill = 'skyblue') +
+  theme_bw() +
+  labs(title = 'Count of dispatches per day of the week',
+       x = '',
+       y = 'Count')
+  
 
+# 
 
