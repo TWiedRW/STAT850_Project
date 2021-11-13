@@ -1,16 +1,22 @@
 ---
 title: "Stat 850 Project Rough Draft"
 author: "Drew Hultquist, Tyler Wiederich, Wyatt McLeod"
-output: github_document
-editor_options: 
-  markdown: 
-    wrap: 72
+output: bookdown::pdf_document2
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, fig.align = 'center', 
+                      warning = F, echo = F)
 options(digits = 3)
 ```
+
+# Abstract
+
+The city of Lincoln, Nebraska maintains online open access data. Several of these data sets pertain to incidents recorded by the Lincoln Fire Department. This analysis explores response times, mapping visualizations, association of weather and traffic accidents, and a breakdown of significance by criteria based on dates.
+
+# Introduction
+
+
 
 ## Data Set
 
@@ -44,3 +50,43 @@ library(ggplot2)
 
 
 ```
+
+
+
+
+# Correlation of Dispatches and Weather
+
+```{r, include=F}
+source('TW_source.R')
+```
+
+
+One may think that the weather has a discernible impact on the number of times that the services of LFD are required. Rain or snow could potentially cause additional LFD resources. However, Figure \@ref(fig:plot-pairs-temp) shows that there is little correlation between the count of dispatches and temperature reports.
+
+```{r plot-pairs-temp, fig.cap='The correlation of the count of dispatches is less than 0.2 for all temperature categories. In this plot, TMIN is the minimum daily temperature, TAVG is the average daily temperature, and TMAX is the maximum daily temperature.'}
+plot_pairs_temp
+```
+
+Especially in the Count column and row of \@ref(fig:plot-pairs-temp), it is clear that temperature (and hence seasonal) relationships with the number of dispatches are not associated.
+
+Another metric to consider is the amount of precipitation levels. Figure \@ref(fig:plot-pairs-precip) shows the relationship between precipitation and the number of dispatches per day. Measurements are averaged over multiple weather station in Lincoln.
+
+```{r plot-pairs-precip, fig.cap='The correlation between the number of dispatches and the amount of precipitation is less than 0.04. In this plot, precip is the amount of precipitation, snow is the amount of snowfall, and snow_dpth is the amount of snow on the ground.'}
+plot_pairs_precip
+```
+
+As evident in the Count column and row for Figure \@ref(fig:plot-pairs-precip), there is very little correlation between the amount of precipitation and the number of dispatches from LFD.
+
+# Breakdown of Dates and their Significance on Incidents
+
+There are two 
+
+
+
+
+
+
+
+
+
+

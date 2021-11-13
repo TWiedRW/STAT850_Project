@@ -88,12 +88,12 @@ inc_weath = full_join(df_inc_summ_daily,
                       by = c('Date' = 'Date'))
 
 #Checking correlations with predictors
-pairs_precip = inc_weath %>% 
+plot_pairs_precip = inc_weath %>% 
   select(Count, precip, snow, snow_dpth) %>% 
   ggpairs() +
   theme_bw() +
   ggtitle('Scatterplot Matrix of Dispatches and Precipitation')
-pairs_precip #No major correlations, can disregard
+plot_pairs_precip #No major correlations, can disregard
 
 
 
