@@ -23,7 +23,9 @@
 library(tidyverse) #tidyverse packages
 library(lubridate) #working with dates
 library(car) #for Type II and III tests with unequal sample sizes
-library(GGally)
+library(GGally) #for ggpairs scatterplot matrix
+library(forecast) #access to ACF functions
+library(scico) #for color palletes
 
 options(scipen = 999)
 
@@ -32,9 +34,9 @@ apparatus = read.csv('LFR_apparatus_2019_CLEAN.csv')
 incidents = read.csv('LFR_incidents_2019_CLEAN.csv')
 weather = read.csv('weather.csv') #https://www1.ncdc.noaa.gov/pub/data/cdo/documentation/GHCND_documentation.pdf
 traffic = read.csv('Traffic_Crashes_2019.csv')
-arrests = read.csv('LPD_arrestd_and_citations_2019.csv')
-traffic_stops = read.csv('LPD_traffic_stops_2019.csv')
-dispatch_lpd = read.csv('LPD_Dispatch_Records_2019.csv')
+#arrests = read.csv('LPD_arrestd_and_citations_2019.csv')
+#traffic_stops = read.csv('LPD_traffic_stops_2019.csv')
+#dispatch_lpd = read.csv('LPD_Dispatch_Records_2019.csv')
 
 #Vehicle dispatches
 apparatus2 = apparatus %>% 
@@ -55,8 +57,8 @@ df_inc_summ_daily = joined %>%
   unique() %>% #Since a record exists for each vehicle
   group_by(Date) %>% 
   summarize(Count = n()) %>% 
-  mutate(wday = wday(Date, label = T),
-         month = month(Date, label = T),
+  mutate(wday = factor(wday(Date, label = T), ordered = F),
+         month = factor(month(Date, label = T), ordered = F),
          week = epiweek(Date),
          wday_cat = ifelse(wday %in% c('Sun', 'Sat'), 'Weekend', 'Weekday'))
 
@@ -70,13 +72,12 @@ df_temps = weather %>%
 df_precip = weather %>% 
   mutate(Date = as_date(DATE)) %>% 
   select(STATION, LATITUDE, LONGITUDE, Date, PRCP, SNOW, SNWD)
-df_precip[is.na(df_precip)] <- 0
 
 df_precip_avg = df_precip %>% 
   group_by(Date) %>% 
-  summarise(precip = mean(PRCP),
-            snow = mean(SNOW),
-            snow_dpth = mean(SNWD))
+  summarise(precip = mean(PRCP, na.rm = T),
+            snow = mean(SNOW, na.rm = T),
+            snow_dpth = mean(SNWD, na.rm = T))
 
 
 
@@ -123,9 +124,7 @@ traffic_summ = traffic %>%
 inc_traff = df_inc_summ_daily %>% 
   full_join(traffic_summ, by = 'Date')
 
-#cor(inc_traff$Count[1:364], inc_traff$Accidents[1:364]) #Cor = 0.039, not worth checking into
-
-
+acc_corr = cor(inc_traff$Count[1:364], inc_traff$Accidents[1:364]) #Cor = 0.039, not worth checking into
 
 # Breakdown of dates ------------------------------------------------------
 
@@ -180,5 +179,44 @@ plot_wcat = ggplot(df_inc_summ_daily,
   coord_flip()
 plot_wcat
 
-  
-  
+
+#A single model
+mod_wcat_mt = aov(Count ~ month + wday_cat + 0, data = df_inc_summ_daily)
+anova_wcat_mt = Anova(mod_wcat_mt, type = 2) %>% broom::tidy()
+anova_wcat_mt
+
+tukey_sig_wcat_mt = TukeyHSD(mod_wcat_mt, ordered = T) %>% 
+  broom::tidy() %>% 
+  filter(adj.p.value <= 0.05) %>% 
+  select(-null.value)
+names(tukey_sig_wcat_mt) <- c('Term', 'Contrast', 'Estimate', 'CI Low', 'CI High', 'Adjusted p-value')
+tukey_sig_wcat_mt
+
+wcat_mt_fitted = broom::augment(mod_wcat_mt) %>% 
+  select(month, wday_cat, .fitted) %>% 
+  unique() %>% 
+  reshape2::dcast(month ~ wday_cat)
+
+#Heat map of day of week and month
+plot_heatmap_wday_mt = df_inc_summ_daily %>% 
+  group_by(wday, month) %>% 
+  summarise(Mean = mean(Count)) %>% 
+  ggplot(aes(x = wday, y = month, fill = Mean)) +
+  geom_raster() +
+  theme_minimal() +
+  labs(title = 'Average Dispatch Count by Day of Week and Month',
+       x = 'Day of Week',
+       y = 'Month') +
+  theme(panel.grid.major = element_blank()) +
+  scale_y_discrete(limits = rev(month))
+
+# Assumptions -------------------------------------------------------------
+
+#ACF of daily dispatches
+ts_dispatch = ts(df_inc_summ_daily$Count, start = 1)
+
+plot_acf_dispatch = ggAcf(ts_dispatch) + 
+  theme_bw() +
+  ggtitle('ACF Plot of Dispatch Count by Date')
+plot_acf_dispatch
+

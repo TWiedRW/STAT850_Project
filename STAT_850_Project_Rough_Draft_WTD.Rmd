@@ -5,8 +5,7 @@ output: bookdown::pdf_document2
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, fig.align = 'center', 
-                      warning = F, echo = F)
+knitr::opts_chunk$set(echo = FALSE, warning = F, echo = F)
 options(digits = 3)
 ```
 
@@ -30,12 +29,12 @@ fire zone map square miles of fire zone max distanced traveled
 
 
 ```{r}
-library(tidyverse)
-tmp <- read_csv("LFR_incidents_2019_CLEAN.csv")
-incidents <- read.csv("LFR_incidents_2019_CLEAN.csv")
-apparatus <- read.csv("LFR_apparatus_2019_CLEAN.csv")
-library(skimr)
-skim(tmp)
+#library(tidyverse)
+#tmp <- read_csv("LFR_incidents_2019_CLEAN.csv")
+#incidents <- read.csv("LFR_incidents_2019_CLEAN.csv")
+#apparatus <- read.csv("LFR_apparatus_2019_CLEAN.csv")
+#library(skimr)
+#skim(tmp)
 ```
 
 > 
@@ -63,7 +62,7 @@ source('TW_source.R')
 
 One may think that the weather has a discernible impact on the number of times that the services of LFD are required. Rain or snow could potentially cause additional LFD resources. However, Figure \@ref(fig:plot-pairs-temp) shows that there is little correlation between the count of dispatches and temperature reports.
 
-```{r plot-pairs-temp, fig.cap='The correlation of the count of dispatches is less than 0.2 for all temperature categories. In this plot, TMIN is the minimum daily temperature, TAVG is the average daily temperature, and TMAX is the maximum daily temperature.'}
+```{r plot-pairs-temp, fig.height = 3, fig.cap='The correlation of the count of dispatches is less than 0.2 for all temperature categories. In this plot, TMIN is the minimum daily temperature, TAVG is the average daily temperature, and TMAX is the maximum daily temperature.'}
 plot_pairs_temp
 ```
 
@@ -71,21 +70,76 @@ Especially in the Count column and row of \@ref(fig:plot-pairs-temp), it is clea
 
 Another metric to consider is the amount of precipitation levels. Figure \@ref(fig:plot-pairs-precip) shows the relationship between precipitation and the number of dispatches per day. Measurements are averaged over multiple weather station in Lincoln.
 
-```{r plot-pairs-precip, fig.cap='The correlation between the number of dispatches and the amount of precipitation is less than 0.04. In this plot, precip is the amount of precipitation, snow is the amount of snowfall, and snow_dpth is the amount of snow on the ground.'}
+```{r plot-pairs-precip, fig.height = 3, fig.cap='The correlation between the number of dispatches and the amount of precipitation is less than 0.04. In this plot, precip is the amount of precipitation, snow is the amount of snowfall, and snow_dpth is the amount of snow on the ground.'}
 plot_pairs_precip
 ```
 
 As evident in the Count column and row for Figure \@ref(fig:plot-pairs-precip), there is very little correlation between the amount of precipitation and the number of dispatches from LFD.
 
-# Breakdown of Dates and their Significance on Incidents
+# Correlation of Reported Traffic Accidents and the Number of Dispatches
 
-There are two 
+In the case of traffic accidents, it is reasonable to assume that an increased number of accidents would influence the number of dispatches from LFD. Bad accidents may require additional services. However, the correlation coefficient between accidents and the number of dispatches is `r round(acc_corr,3)`. Due to a low correlation, this connection will not have any further exploration.
+
+# Breakdown of Dates and their Significance on the Number of Dispatches
+
+The next research question deals with if any partition of the date had an impact on the number of dispatches. Through the combinations of models for weekday, month, and weekday classification (weekend or weekday), the following model holds significance:
+
+$$y_{ijk}=\mu + w_i+m_j+\epsilon_{ijk}$$
+where 
+
+$\mu=\text{Average over all months and day classifications}$
+
+$w_i=\text{Weekday classification where 0 = Weekday and 1 = Weekend}$
+
+$m_j=\text{The corresponding month (1 = January, 2 = February, etc.)}$
+
+$\epsilon_{ijk} \sim N(0,\sigma^2)=\text{Error variation for each observation}$
+
+One assumption is that the responses are independently and identically distributed. In the Appendix, it is shown that we can satisfy this assumption by checking the autocorrelations of counts for each date. Table \@ref(tab:wcat-mt-table) shows the corresponding ANOVA table for this model.
+
+```{r wcat-mt-table}
+knitr::kable(anova_wcat_mt, digits = 4,
+             caption = 'The effect of month and day weekday classification are both significant')
+```
+
+Upon further inspection using Tukey's HSD, the contrasts in Table \@ref(tab:tab-t-hsd) are significant. We see that August had significantly more dispatches than March, June, and December. Additionally, we see that the difference between the number of dispatches is significantly higher for weekdays than for weekends.
+
+```{r tab-t-hsd}
+tukey_sig_wcat_mt %>% 
+  select(-Term) %>% 
+  knitr::kable(caption = 'Significant contrasts of the model using months and day of week category')
+```
+
+
+In Table \@ref(tab:tab-wcat-mt-fitted), the fitted model values are shown for each month and day of week classification. 
+
+```{r tab-wcat-mt-fitted}
+knitr::kable(wcat_mt_fitted, col.names = c('Month', 'Weekday', 'Weekend'),
+             caption = 'Fitted values')
+```
+
+Figure \@ref(fig:plot-wmt-heat) visually displays these differences across day of the week. 
+
+```{r plot-wmt-heat, fig.height=2}
+plot_heatmap_wday_mt + 
+  scico::scale_fill_scico(palette = "lajolla",
+                          direction = 1)
+```
 
 
 
 
 
 
+# Appendix
+
+## Independence of observations
+
+One assumption for the count of dispatches per day is that each day is independent. To check this, we can verify if there is any significant autocorrelation. Figure \@ref(fig:plot-acf-dispatch) shows the autocorrelation plot using the count of daily dispatches as a time series. Although there appears to be some significant autocorrelation at lag 1 and lag 3 (probably due to the weekday category effect), these do not strongly suggest that the data is dependent on trends. Therefore we can reasonably assume 
+
+```{r plot-acf-dispatch, fig.cap='Autocorrelation plot of daily dispatch counts. This verifies that daily observations can be assumed to have independence from discernible trends'}
+plot_acf_dispatch
+```
 
 
 
