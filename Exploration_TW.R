@@ -53,18 +53,7 @@ fr_log = first_responder %>%
   facet_wrap(~station)
 fr_log  #We see that this approximately log-normal
 
-attach(first_responder)
-mod = aov(log(time_to_arrive_min) ~ as.character(station))
 
-anova(mod)
-TukeyHSD(mod, conf.level = 0.95) %>% broom::tidy() %>% 
-  filter(adj.p.value <= 0.05) %>% 
-  mutate(estimate = exp(estimate),
-         conf.low = exp(conf.low),
-         conf.high = exp(conf.high)) %>% 
-  View()
-
-read
 
 TukeyHSD(mod) %>% plot()
 
@@ -91,12 +80,6 @@ dat_weath %>%
   facet_wrap(~variable,
              nrow = 2,
              scales = 'free_y')
-
-
-
-
-
-
 
 
 joined %>% 
@@ -140,7 +123,8 @@ inc_summ = joined %>%
   group_by(Date) %>% 
   summarise(Count = n()) %>% 
   mutate(wday = wday(Date, label = T),
-         month = month(Date, label = T)) %>% 
+         month = month(Date, label = T),
+         wday_cat = ifelse(wday %in% c('Sun', 'Sat'), 'Weekend', 'Weekday')) %>% 
   filter(is.na(Date) == F)
   
 inc_traff = inc_summ %>% 
@@ -172,6 +156,62 @@ summary(mod_m)
 TukeyHSD(mod_m) %>% 
   broom::tidy() %>% 
   filter(adj.p.value <= 0.05)
+
+
+
+
+#Checking independence of daily incidents using ACF on TS
+ts_inc = ts(inc_summ$Count, start = 1)
+ggAcf(ts_inc) #maybe some autocorrelation on previous day, but not strong
+
+
+lm(Count ~ Date, data = inc_summ) %>% anova() #not sig
+lm(Count ~ wday, data = inc_summ) %>% anova() # not sig
+lm(Count ~ wday_cat, data = inc_summ) %>% anova() #Sig
+lm(Count ~ month, data = inc_summ) %>% anova() #Sig
+
+#Testing equal variances for t test
+var.test(inc_summ$Count[inc_summ$wday_cat == 'Weekend'],
+         inc_summ$Count[inc_summ$wday_cat == 'Weekday'])
+    #Not equal variances
+
+t.mod = t.test(Count ~ wday_cat, data = inc_summ, var.equal = F) #Different on weekends and weekdays
+
+#Plot of day type
+inc_summ %>% 
+  ggplot(mapping = aes(x = wday_cat, y = Count)) +
+  geom_boxplot(fill = 'skyblue', width = 1/3) +
+  theme_bw() +
+  labs(title = 'Boxplot of Incidents per Type of Day',
+       caption = paste0('p-value: ', round(t.mod$p.value, 4)),
+       x = '')
+
+#Checking sig in month
+mod_mt = aov(Count ~ month, data = inc_summ)
+sig_mt = TukeyHSD(mod_mt) %>% broom::tidy() %>% 
+  filter(adj.p.value <= 0.05) %>% 
+  mutate(adj.p.value = round(adj.p.value, 4))
+sig_mt
+  #Aug higher than Mar, Jun, Dec
+
+inc_summ %>% 
+  ggplot(aes(x = month, y = Count)) +
+  geom_boxplot(fill = 'skyblue') +
+  theme_bw() +
+  labs(title = 'Boxplots for Count of Incidents by Month',
+       caption = paste0(
+         'Significant p-values for contrasts\n',
+         sig_mt$contrast[1], ': ', sig_mt$adj.p.value[1], '\n',
+         sig_mt$contrast[2], ': ', sig_mt$adj.p.value[2], '\n',
+         sig_mt$contrast[3], ': ', sig_mt$adj.p.value[3]
+       ),
+       x = '')
+  
+
+
+
+
+
 
 
 
