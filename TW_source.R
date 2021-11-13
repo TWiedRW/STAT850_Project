@@ -192,10 +192,10 @@ tukey_sig_wcat_mt = TukeyHSD(mod_wcat_mt, ordered = T) %>%
 names(tukey_sig_wcat_mt) <- c('Term', 'Contrast', 'Estimate', 'CI Low', 'CI High', 'Adjusted p-value')
 tukey_sig_wcat_mt
 
-wcat_mt_fitted = broom::augment(mod_wcat_mt) %>% 
+wcat_mt_fitted = broom::augment(lm(Count ~ month + wday_cat + 0, data = df_inc_summ_daily)) %>% 
   select(month, wday_cat, .fitted) %>% 
   unique() %>% 
-  reshape2::dcast(month ~ wday_cat)
+  reshape2::dcast(month ~ wday_cat, value.var = '.fitted')
 
 #Heat map of day of week and month
 plot_heatmap_wday_mt = df_inc_summ_daily %>% 
@@ -208,7 +208,8 @@ plot_heatmap_wday_mt = df_inc_summ_daily %>%
        x = 'Day of Week',
        y = 'Month') +
   theme(panel.grid.major = element_blank()) +
-  scale_y_discrete(limits = rev(month))
+  scale_y_discrete(limits = rev(levels(df_inc_summ_daily$month)))
+plot_heatmap_wday_mt
 
 # Assumptions -------------------------------------------------------------
 

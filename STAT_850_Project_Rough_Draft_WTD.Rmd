@@ -1,7 +1,7 @@
 ---
 title: "Stat 850 Project Rough Draft"
 author: "Drew Hultquist, Tyler Wiederich, Wyatt McLeod"
-output: bookdown::pdf_document2
+output: bookdown::html_document2
 ---
 
 ```{r setup, include=FALSE}
@@ -66,7 +66,7 @@ One may think that the weather has a discernible impact on the number of times t
 plot_pairs_temp
 ```
 
-Especially in the Count column and row of \@ref(fig:plot-pairs-temp), it is clear that temperature (and hence seasonal) relationships with the number of dispatches are not associated.
+Especially in the Count column and row of Figure \@ref(fig:plot-pairs-temp), it is clear that temperature (and hence seasonal) relationship with the number of dispatches is not correlated.
 
 Another metric to consider is the amount of precipitation levels. Figure \@ref(fig:plot-pairs-precip) shows the relationship between precipitation and the number of dispatches per day. Measurements are averaged over multiple weather station in Lincoln.
 
@@ -120,7 +120,7 @@ knitr::kable(wcat_mt_fitted, col.names = c('Month', 'Weekday', 'Weekend'),
 
 Figure \@ref(fig:plot-wmt-heat) visually displays these differences across day of the week. 
 
-```{r plot-wmt-heat, fig.height=2}
+```{r plot-wmt-heat, fig.height=3, fig.cap='August has a higher average. It is also shown that multiple weedays have higher averages than weekends.'}
 plot_heatmap_wday_mt + 
   scico::scale_fill_scico(palette = "lajolla",
                           direction = 1)
@@ -137,7 +137,7 @@ plot_heatmap_wday_mt +
 
 One assumption for the count of dispatches per day is that each day is independent. To check this, we can verify if there is any significant autocorrelation. Figure \@ref(fig:plot-acf-dispatch) shows the autocorrelation plot using the count of daily dispatches as a time series. Although there appears to be some significant autocorrelation at lag 1 and lag 3 (probably due to the weekday category effect), these do not strongly suggest that the data is dependent on trends. Therefore we can reasonably assume 
 
-```{r plot-acf-dispatch, fig.cap='Autocorrelation plot of daily dispatch counts. This verifies that daily observations can be assumed to have independence from discernible trends'}
+```{r plot-acf-dispatch, fit.height = 3, fig.cap='Autocorrelation plot of daily dispatch counts. This verifies that daily observations can be assumed to have independence from discernible trends'}
 plot_acf_dispatch
 ```
 
