@@ -130,7 +130,8 @@ traffic %>%
 
 traffic_summ = traffic %>% 
   group_by(Date) %>% 
-  summarise(Count_acc = n())
+  summarise(Count_acc = n()) %>% 
+  filter(is.na(Date) == F)
 
 inc_summ = joined %>% 
   mutate(Date = as.Date(ctm_dispatch)) %>% 
@@ -138,32 +139,42 @@ inc_summ = joined %>%
   unique() %>% 
   group_by(Date) %>% 
   summarise(Count = n()) %>% 
+  mutate(wday = wday(Date, label = T),
+         month = month(Date, label = T)) %>% 
   filter(is.na(Date) == F)
-
-
-inc_traff = traffic_summ %>% 
-  full_join(inc_summ, by = 'Date') %>% 
-  filter(is.na(Date) == F) %>% 
-  mutate(wday = wday(Date, label = T))
-
-
-cor(inc_traff$Count_acc, inc_traff$Count)
-
-
-
-attach(inc_traff)
-mod_wday = aov(Count ~ wday)
-summary(mod_wday)
-detach(inc_traff)
-
-inc_traff %>% 
-  ggplot(aes(x = wday, y = Count)) +
-  geom_boxplot(fill = 'skyblue') +
-  theme_bw() +
-  labs(title = 'Count of dispatches per day of the week',
-       x = '',
-       y = 'Count')
   
+inc_traff = inc_summ %>% 
+  full_join(traffic_summ, by = 'Date') 
 
-# 
+cor(inc_traff$Count, inc_traff$Count_acc) #Very small correlation, probably not worth looking into
+
+
+#Checking day of week and month model (wday and month)
+#Note: unequal sample sizes for combinations, so Type III test needed
+library(car)
+mod_mw = lm(Count ~ wday*month, data = inc_summ)
+Anova(mod_mw, type = 3)
+#anova(mod_mw) #you can see how the Type I (R default) is different that the Type III
+
+#Remove interaction
+mod_mw2 = lm(Count ~ wday + month, data = inc_summ)
+Anova(mod_mw2, type = 2) #Type 2 or Type 3 for no interaction
+
+unloadNamespace('car') #unload package since it masks some Tidyverse functions
+
+#Checking month sig
+mod_m = lm(Count ~ month, data = inc_summ)
+anova(mod_m)
+Anova(mod_m, type = 3)
+summary(mod_m)
+
+#Month is sig, further exploration
+TukeyHSD(mod_m) %>% 
+  broom::tidy() %>% 
+  filter(adj.p.value <= 0.05)
+
+
+
+
+
 
