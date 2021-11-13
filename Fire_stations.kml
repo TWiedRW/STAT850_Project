@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="Fire_stations" id="Fire_stations">
+	<SimpleField name="OBJECTID" type="int"></SimpleField>
+	<SimpleField name="Station_lo" type="string"></SimpleField>
+	<SimpleField name="Year_" type="int"></SimpleField>
+	<SimpleField name="Station_Nu" type="string"></SimpleField>
+	<SimpleField name="Station_Na" type="string"></SimpleField>
+	<SimpleField name="Date_Upada" type="string"></SimpleField>
+</Schema>
+<Folder><name>Fire_stations</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">1</SimpleData>
+		<SimpleData name="Station_lo">1801 Q St</SimpleData>
+		<SimpleData name="Year_">1967</SimpleData>
+		<SimpleData name="Station_Nu">1</SimpleData>
+		<SimpleData name="Station_Na">Station_1</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.6948957794102,40.8155640151582</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">2</SimpleData>
+		<SimpleData name="Station_lo">1545 N 33rd St</SimpleData>
+		<SimpleData name="Year_">1990</SimpleData>
+		<SimpleData name="Station_Nu">2</SimpleData>
+		<SimpleData name="Station_Na">Station_2</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.6731861141679,40.8288174132464</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">3</SimpleData>
+		<SimpleData name="Station_lo">5600 S 27th St</SimpleData>
+		<SimpleData name="Year_">1990</SimpleData>
+		<SimpleData name="Station_Nu">4</SimpleData>
+		<SimpleData name="Station_Na">Station_4</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.6819992046947,40.7566223296137</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">4</SimpleData>
+		<SimpleData name="Station_lo">3640 Touzalin Ave</SimpleData>
+		<SimpleData name="Year_">1971</SimpleData>
+		<SimpleData name="Station_Nu">5</SimpleData>
+		<SimpleData name="Station_Na">Station_5</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.6395247207111,40.8493156296452</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">5</SimpleData>
+		<SimpleData name="Station_lo">5051 S 48th St</SimpleData>
+		<SimpleData name="Year_">1971</SimpleData>
+		<SimpleData name="Station_Nu">6</SimpleData>
+		<SimpleData name="Station_Na">Station_6</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.6540849200121,40.7628312113361</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">6</SimpleData>
+		<SimpleData name="Station_lo">1345 S Cotner Blvd</SimpleData>
+		<SimpleData name="Year_">1954</SimpleData>
+		<SimpleData name="Station_Nu">7</SimpleData>
+		<SimpleData name="Station_Na">Station_7</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.6506369148394,40.7992069272462</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">7</SimpleData>
+		<SimpleData name="Station_lo">2760 S 17th St</SimpleData>
+		<SimpleData name="Year_">1958</SimpleData>
+		<SimpleData name="Station_Nu">8</SimpleData>
+		<SimpleData name="Station_Na">Station_8</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.6964376875976,40.7849395842159</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">8</SimpleData>
+		<SimpleData name="Station_lo">1440 Adams St</SimpleData>
+		<SimpleData name="Year_">1965</SimpleData>
+		<SimpleData name="Station_Nu">10</SimpleData>
+		<SimpleData name="Station_Na">Station_10</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.69956644846,40.8431283594003</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">9</SimpleData>
+		<SimpleData name="Station_lo">1700 S Coddington Ave</SimpleData>
+		<SimpleData name="Year_">1981</SimpleData>
+		<SimpleData name="Station_Nu">13</SimpleData>
+		<SimpleData name="Station_Na">Station_13</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.7489657746698,40.7959358023392</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">10</SimpleData>
+		<SimpleData name="Station_lo">5435 NW 1ST ST</SimpleData>
+		<SimpleData name="Year_">1997</SimpleData>
+		<SimpleData name="Station_Nu">14</SimpleData>
+		<SimpleData name="Station_Na">Station_14</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.7223147185248,40.8650244192375</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">11</SimpleData>
+		<SimpleData name="Station_lo">2201 S 84th St</SimpleData>
+		<SimpleData name="Year_">1975</SimpleData>
+		<SimpleData name="Station_Nu">12</SimpleData>
+		<SimpleData name="Station_Na">Station_12</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.6065178316899,40.790296338268</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">12</SimpleData>
+		<SimpleData name="Station_lo">901 N Cotner Blvd</SimpleData>
+		<SimpleData name="Year_">1962</SimpleData>
+		<SimpleData name="Station_Nu">9</SimpleData>
+		<SimpleData name="Station_Na">Station_9</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.6339370549795,40.8218850447272</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">13</SimpleData>
+		<SimpleData name="Station_lo">3401 NW Luke ST</SimpleData>
+		<SimpleData name="Year_">2011</SimpleData>
+		<SimpleData name="Station_Nu">11</SimpleData>
+		<SimpleData name="Station_Na">Station_11</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.7710599457655,40.8497664953046</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Fire_stations">
+		<SimpleData name="OBJECTID">14</SimpleData>
+		<SimpleData name="Station_lo">2nd &amp; N St</SimpleData>
+		<SimpleData name="Year_">1972</SimpleData>
+		<SimpleData name="Station_Nu">3</SimpleData>
+		<SimpleData name="Station_Na">Station_3</SimpleData>
+		<SimpleData name="Date_Upada">2012/03/02 00:00:00+00</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-96.7190802689798,40.8127721827374</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>
