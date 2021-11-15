@@ -15,32 +15,21 @@ The city of Lincoln, Nebraska maintains online open access data. Several of thes
 
 # Introduction
 
-
-
 ## Data Set
 
 <https://opendata.lincoln.ne.gov/datasets/LincolnNE>::lfr-apparatus-2019/about
 
 <https://opendata.lincoln.ne.gov/datasets/lfr-incidents-2019/explore>
 
-
-<https://opendata.lincoln.ne.gov/maps/941bdcfcaa4b460581461537687d8a92/about>
-fire zone map square miles of fire zone max distanced traveled
-
+<https://opendata.lincoln.ne.gov/maps/941bdcfcaa4b460581461537687d8a92/about> fire zone map square miles of fire zone max distanced traveled
 
 ```{r}
-#library(tidyverse)
-#tmp <- read_csv("LFR_incidents_2019_CLEAN.csv")
-#incidents <- read.csv("LFR_incidents_2019_CLEAN.csv")
-#apparatus <- read.csv("LFR_apparatus_2019_CLEAN.csv")
-#library(skimr)
-#skim(tmp)
+library(tidyverse)
+incidents <- read.csv("LFR_incidents_2019_CLEAN.csv")
+apparatus <- read.csv("LFR_apparatus_2019_CLEAN.csv")
+library(skimr)
+
 ```
-
-> 
-
-
-
 
 ```{r}
 library(sf)
@@ -50,15 +39,11 @@ library(ggplot2)
 
 ```
 
-
-
-
 # Correlation of Dispatches and Weather
 
 ```{r, include=F}
 source('TW_source.R')
 ```
-
 
 One may think that the weather has a discernible impact on the number of times that the services of LFD are required. Rain or snow could potentially cause additional LFD resources. However, Figure \@ref(fig:plot-pairs-temp) shows that there is little correlation between the count of dispatches and temperature reports.
 
@@ -84,8 +69,7 @@ In the case of traffic accidents, it is reasonable to assume that an increased n
 
 The next research question deals with if any partition of the date had an impact on the number of dispatches. Through the combinations of models for weekday, month, and weekday classification (weekend or weekday), the following model holds significance:
 
-$$y_{ijk}=\mu + w_i+m_j+\epsilon_{ijk}$$
-where 
+$$y_{ijk}=\mu + w_i+m_j+\epsilon_{ijk}$$ where
 
 $\mu=\text{Average over all months and day classifications}$
 
@@ -110,15 +94,14 @@ tukey_sig_wcat_mt %>%
   knitr::kable(caption = 'Significant contrasts of the model using months and day of week category')
 ```
 
-
-In Table \@ref(tab:tab-wcat-mt-fitted), the fitted model values are shown for each month and day of week classification. 
+In Table \@ref(tab:tab-wcat-mt-fitted), the fitted model values are shown for each month and day of week classification.
 
 ```{r tab-wcat-mt-fitted}
 knitr::kable(wcat_mt_fitted, col.names = c('Month', 'Weekday', 'Weekend'),
              caption = 'Fitted values')
 ```
 
-Figure \@ref(fig:plot-wmt-heat) visually displays these differences across day of the week. 
+Figure \@ref(fig:plot-wmt-heat) visually displays these differences across day of the week.
 
 ```{r plot-wmt-heat, fig.height=3, fig.cap='August has a higher average. It is also shown that multiple weedays have higher averages than weekends.'}
 plot_heatmap_wday_mt + 
@@ -126,21 +109,12 @@ plot_heatmap_wday_mt +
                           direction = 1)
 ```
 
-
-
-
-
-
 # Appendix
 
 ## Independence of observations
 
-One assumption for the count of dispatches per day is that each day is independent. To check this, we can verify if there is any significant autocorrelation. Figure \@ref(fig:plot-acf-dispatch) shows the autocorrelation plot using the count of daily dispatches as a time series. Although there appears to be some significant autocorrelation at lag 1 and lag 3 (probably due to the weekday category effect), these do not strongly suggest that the data is dependent on trends. Therefore we can reasonably assume 
+One assumption for the count of dispatches per day is that each day is independent. To check this, we can verify if there is any significant autocorrelation. Figure \@ref(fig:plot-acf-dispatch) shows the autocorrelation plot using the count of daily dispatches as a time series. Although there appears to be some significant autocorrelation at lag 1 and lag 3 (probably due to the weekday category effect), these do not strongly suggest that the data is dependent on trends. Therefore we can reasonably assume
 
 ```{r plot-acf-dispatch, fit.height = 3, fig.cap='Autocorrelation plot of daily dispatch counts. This verifies that daily observations can be assumed to have independence from discernible trends'}
 plot_acf_dispatch
 ```
-
-
-
-
