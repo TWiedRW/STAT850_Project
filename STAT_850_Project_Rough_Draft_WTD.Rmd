@@ -27,6 +27,14 @@ The city of Lincoln, Nebraska maintains online open access data. Several of thes
 library(tidyverse)
 incidents <- read.csv("LFR_incidents_2019_CLEAN.csv")
 apparatus <- read.csv("LFR_apparatus_2019_CLEAN.csv")
+apparatus2 = apparatus %>% 
+  mutate(ctm_received = mdy_hms(ctm_received),
+         ctm_dispatch = mdy_hms(ctm_dispatch),
+         ctm_enroute = mdy_hms(ctm_enroute),
+         ctm_arrive = mdy_hms(ctm_arrive),
+         ctm_clear = mdy_hms(ctm_clear),
+         total_commit_time = ctm_clear - ctm_received)
+
 library(skimr)
 
 ```
@@ -133,6 +141,7 @@ apparatus2 %>%
   theme(panel.grid.minor = element_blank())
 
 ```
+We see that the main call types of each station is Medical Delta, Medical Charlie, Medical Bravo, Medical Alpha, and Fire Alpha. 
 
 #Top 5 units used for each station
 ```{r} 
@@ -159,7 +168,7 @@ apparatus2 %>%
   theme(panel.grid.minor = element_blank())
 
 ```
-
+We see that many stations do not even use five units. The most common ones used are the Engine and ALS unit. 
 
 
 #Top 5 incidents responded too by each station
@@ -178,7 +187,7 @@ apparatus2 %>%
   geom_point(aes(x = station, y = inc_desc, color = prop),
              show.legend = T, size = 5) +
   theme_bw() +
-  labs(title = 'Top Five IncidentsResponded too by Station',
+  labs(title = 'Top Five Incidents Responded too by Station',
        x = 'Station',
        y = 'Incident Description',
        color = 'Count') +
@@ -186,6 +195,7 @@ apparatus2 %>%
   ggthemes::scale_color_gradient_tableau('Blue-Teal') +
   theme(panel.grid.minor = element_blank())
 ```
+The main incidents appears to be Rescue/EMS. The other common ones are false alarm, canceled in route, and building fire. 
 
 #Top 5 Actions taken by each station
 ```{r} 
@@ -212,7 +222,7 @@ apparatus2 %>%
   ggthemes::scale_color_gradient_tableau('Blue-Teal') +
   theme(panel.grid.minor = element_blank())
 ```
-
+The top actions taken by a fire station appear to be standby, investigate, incident command, and cancelled in route. 
 #Average Response Time Per Station
 ```{r} 
 apparatus2 %>% 
@@ -222,16 +232,16 @@ apparatus2 %>%
   filter(station != 98  ) %>% 
   ggplot() +
   geom_point(aes(x = station, y = total_responce_time))+
-  ylim(0,6500)
+  ylim(0,6500)+
              
-  theme_bw() +
-  labs(title = 'Average Response Time by Station',
+  
+  labs(title =  'Incident Response Time by Station',
        x = 'Station',
-       y = 'Average Response Time',
+       y = 'Total Response Time (Seconds)',
        color = 'Count') +
   scale_x_continuous(breaks = 1:15) 
 ```
-
+Station 15 appears to have the best (lowest) response time. 
 
 # Appendix
 
