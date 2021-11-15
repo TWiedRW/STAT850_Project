@@ -221,3 +221,15 @@ plot_acf_dispatch = ggAcf(ts_dispatch) +
   ggtitle('ACF Plot of Dispatch Count by Date')
 plot_acf_dispatch
 
+
+
+
+
+
+
+
+
+
+
+
+
