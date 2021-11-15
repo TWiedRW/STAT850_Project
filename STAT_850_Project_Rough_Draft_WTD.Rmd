@@ -1,7 +1,7 @@
 ---
 title: "Stat 850 Project Rough Draft"
 author: "Drew Hultquist, Tyler Wiederich, Wyatt McLeod"
-output: bookdown::pdf_document2
+output: bookdown::html_document2
 ---
 
 ```{r setup, include=FALSE}
@@ -39,11 +39,41 @@ library(ggplot2)
 
 ```
 
-# Correlation of Dispatches and Weather
+
 
 ```{r, include=F}
 source('TW_source.R')
 ```
+```{r, include=F}
+source('WM_Source.R')
+```
+# Selected Maps
+
+This map shows the locations of each fire station in Lincoln in 2019, without Station 15 as it was completed late in 2019. There are 14 fire zones shown on the map, and clicking on the markers shows the station name as well as its street address.
+
+```{r base_map}
+base_map
+```
+
+The following map is a visualization of the number of dispatches that each fire zone received over the course of 2019. The color scheme goes from white to navy blue, and will show the exact number of dispatches for that zone when clicked on. *(Currently the data is not placed correctly)*
+
+```{r dispatch_map}
+dispatch_map
+```
+
+Turnout time, otherwise known as the time it takes for a fire engine to leave the station from the time it receives a call, is an important metric for evaluating fire stations. The following map shows that most fire stations in Lincoln have relatively similar turnout times, all around 80 seconds.
+
+```{r turnout_map}
+turnout_map
+```
+
+Lastly, it may be useful to know about how far away in minutes a fire engine may be if it receives a call for your residence. This map (once made fully interactive) will show the distance a fire engine can cover in 3 minutes, 5 minutes and 7 minutes for any of the fire stations found in Lincoln.
+
+```{r times}
+times
+```
+
+# Correlation of Dispatches and Weather
 
 One may think that the weather has a discernible impact on the number of times that the services of LFD are required. Rain or snow could potentially cause additional LFD resources. However, Figure \@ref(fig:plot-pairs-temp) shows that there is little correlation between the count of dispatches and temperature reports.
 
