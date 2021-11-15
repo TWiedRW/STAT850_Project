@@ -171,7 +171,8 @@ apparatus2 %>%
   theme(panel.grid.minor = element_blank())
 
 ```
-We see that the main call types of each station is Medical Delta, Medical Charlie, Medical Bravo, Medical Alpha, and Fire Alpha. 
+We see that the main call types of each station is Medical Delta, Medical Charlie, Medical Bravo, Medical Alpha, and Fire Alpha. Station 9 has a call called Medical Echo that it uses often compared to the other stations. Station 14 has a call called Fire Charlie that it uses often compared to the other stations. 
+
 
 #Top 5 units used for each station
 ```{r} 
@@ -198,7 +199,7 @@ apparatus2 %>%
   theme(panel.grid.minor = element_blank())
 
 ```
-We see that many stations do not even use five units. The most common ones used are the Engine and ALS unit. 
+We see that many stations do not even use five units. The most common ones used are the Engine and ALS unit. Station 14 is unique in that it uses a light and air unit and hazmat unit in its top five compared to the other stations. Station 1 has a rescue unit that is used often. 
 
 
 #Top 5 incidents responded too by each station
@@ -225,7 +226,7 @@ apparatus2 %>%
   ggthemes::scale_color_gradient_tableau('Blue-Teal') +
   theme(panel.grid.minor = element_blank())
 ```
-The main incidents appears to be Rescue/EMS. The other common ones are false alarm, canceled in route, and building fire. 
+The main incidents appears to be Rescue/EMS. The other common ones are false alarm, canceled in route, and building fire. Station 10 has a lot of citizen complaints compared to other incidents. Station 3 has a lot of unintentional transmission of alarm and station 11 gets a lot of special type of incidents. 
 
 #Top 5 Actions taken by each station
 ```{r} 
@@ -252,7 +253,7 @@ apparatus2 %>%
   ggthemes::scale_color_gradient_tableau('Blue-Teal') +
   theme(panel.grid.minor = element_blank())
 ```
-The top actions taken by a fire station appear to be standby, investigate, incident command, and cancelled in route. 
+The top actions taken by a fire station appear to be standby, investigate, incident command, and cancelled in route. Station 14 is unique in that one of its top actions is assistance and providning air supply. Station 11 is unique in that one of its top actions are restoring fire alarm system. Fire control or extinguishment and extinguishment by fire service personnel should be fairly similar. Fire stations most likly have different names for similar actions.  
 #Average Response Time Per Station
 ```{r} 
 apparatus2 %>% 
@@ -271,7 +272,7 @@ apparatus2 %>%
        color = 'Count') +
   scale_x_continuous(breaks = 1:15) 
 ```
-Station 15 appears to have the best (lowest) response time. 
+Station 15 appears to have the best (lowest) response time. Station 1 appears to have the highest response time. Stations begin to have outliers around 2000 seconds which is about 33.33 minutes. 
 
 # Appendix
 
